@@ -2,32 +2,197 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
-}
+@layer base {
+  @layer base {
+    :root {
+      --background: 0 0% 100%;
+      --foreground: 224 71.4% 4.1%;
+      --card: 220 33% 98%;
+      --card-foreground: 224 71.4% 4.1%;
+      --popover: 0 0% 100%;
+      --popover-foreground: 224 71.4% 4.1%;
+      --primary: 234 100% 68%;
+      --primary-foreground: 210 20% 98%;
+      --secondary: 220 14.3% 95.9%;
+      --secondary-foreground: 220.9 39.3% 11%;
+      --muted: 220 14.3% 95.9%;
+      --muted-foreground: 220 8.9% 46.1%;
+      --accent: 220 14.3% 95.9%;
+      --accent-foreground: 220.9 39.3% 11%;
+      --destructive: 0 84.2% 60.2%;
+      --destructive-foreground: 210 20% 98%;
+      --border: 220 13% 91%;
+      --input: 220 13% 91%;
+      --ring: 262.1 83.3% 57.8%;
+      --radius: 1rem;
+      --chart-1: ;
+      --chart-2: ;
+      --chart-3: ;
+      --chart-4: ;
+      --chart-5: ;
+    }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
+    .dark {
+      --background: 224 71.4% 4.1%;
+      --foreground: 210 20% 98%;
+      --card: 224 71.4% 4.1%;
+      --card-foreground: 210 20% 98%;
+      --popover: 224 71.4% 4.1%;
+      --popover-foreground: 210 20% 98%;
+      --primary: 234 100% 68%;
+      --primary-foreground: 210 20% 98%;
+      --secondary: 215 27.9% 16.9%;
+      --secondary-foreground: 210 20% 98%;
+      --muted: 215 27.9% 16.9%;
+      --muted-foreground: 217.9 10.6% 64.9%;
+      --accent: 215 27.9% 16.9%;
+      --accent-foreground: 210 20% 98%;
+      --destructive: 0 62.8% 30.6%;
+      --destructive-foreground: 210 20% 98%;
+      --border: 215 27.9% 16.9%;
+      --input: 215 27.9% 16.9%;
+      --ring: 263.4 70% 50.4%;
+      --chart-1: ;
+      --chart-2: ;
+      --chart-3: ;
+      --chart-4: ;
+      --chart-5: ;
+    }
   }
 }
 
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
 }
 
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
+ul {
+  list-style-type: disc;
+  list-style-position: inside;
+}
+ol {
+  list-style-type: decimal;
+  list-style-position: inside;
+}
+
+.b-b {
+  border: 1px solid blue;
+}
+
+.b-r {
+  border: 1px solid red;
+}
+
+div:focus {
+  outline: 0px solid transparent;
+}
+
+.react-resizable {
+  position: relative;
+}
+.react-resizable-handle {
+  /* position: absolute;
+  width: 20px;
+  height: 20px;
+  bottom: 0;
+  right: 0;
+
+  background: url("data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBzdGFuZGFsb25lPSJubyI/Pg08IS0tIEdlbmVyYXRvcjogQWRvYmUgRmlyZXdvcmtzIENTNiwgRXhwb3J0IFNWRyBFeHRlbnNpb24gYnkgQWFyb24gQmVhbGwgKGh0dHA6Ly9maXJld29ya3MuYWJlYWxsLmNvbSkgLiBWZXJzaW9uOiAwLjYuMSAgLS0+DTwhRE9DVFlQRSBzdmcgUFVCTElDICItLy9XM0MvL0RURCBTVkcgMS4xLy9FTiIgImh0dHA6Ly93d3cudzMub3JnL0dyYXBoaWNzL1NWRy8xLjEvRFREL3N2ZzExLmR0ZCI+DTxzdmcgaWQ9IlVudGl0bGVkLVBhZ2UlMjAxIiB2aWV3Qm94PSIwIDAgNiA2IiBzdHlsZT0iYmFja2dyb3VuZC1jb2xvcjojZmZmZmZmMDAiIHZlcnNpb249IjEuMSINCXhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHhtbDpzcGFjZT0icHJlc2VydmUiDQl4PSIwcHgiIHk9IjBweCIgd2lkdGg9IjZweCIgaGVpZ2h0PSI2cHgiDT4NCTxnIG9wYWNpdHk9IjAuMzAyIj4NCQk8cGF0aCBkPSJNIDYgNiBMIDAgNiBMIDAgNC4yIEwgNCA0LjIgTCA0LjIgNC4yIEwgNC4yIDAgTCA2IDAgTCA2IDYgTCA2IDYgWiIgZmlsbD0iIzAwMDAwMCIvPg0JPC9nPg08L3N2Zz4=");
+  background-position: bottom right;
+  padding: 0 3px 3px 0;
+  background-repeat: no-repeat;
+  background-origin: content-box;
+  box-sizing: border-box;
+  cursor: se-resize;
+  z-index: 999; */
+}
+
+.unSelectable {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.grow-to-bottom {
+  animation: grow-to-bottom-animation 1s forwards; /* Trigger the keyframe animation */
+  transform-origin: top; /* Set the origin for the transform */
+}
+
+/* create grow-to-bottom animation */
+@keyframes grow-to-bottom-animation {
+  0% {
+    height: 0px;
+  }
+  100% {
+    height: 100%;
+  }
+}
+
+.shrink-to-top {
+  animation: shrink-to-top-animation 1s forwards; /* Trigger the keyframe animation */
+  transform-origin: top; /* Set the origin for the transform */
+}
+
+/* create grow-to-bottom animation */
+@keyframes shrink-to-top-animation {
+  0% {
+    height: 100%;
+  }
+  100% {
+    height: 0px;
+  }
+}
+
+.shadow-drop-center {
+  -webkit-animation: shadow-drop-center 0.4s
+    cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+  animation: shadow-drop-center 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+}
+
+/* ----------------------------------------------
+ * Generated by Animista on 2024-8-18 21:6:4
+ * Licensed under FreeBSD License.
+ * See http://animista.net/license for more info. 
+ * w: http://animista.net, t: @cssanimista
+ * ---------------------------------------------- */
+
+/**
+ * ----------------------------------------
+ * animation shadow-drop-center
+ * ----------------------------------------
+ */
+@-webkit-keyframes shadow-drop-center {
+  0% {
+    -webkit-box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
+    box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
+  }
+  100% {
+    --tw-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1),
+      0 4px 6px -4px rgb(0 0 0 / 0.1);
+    --tw-shadow-colored: 0 10px 15px -3px var(--tw-shadow-color),
+      0 4px 6px -4px var(--tw-shadow-color);
+    box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000),
+      var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+  }
+}
+@keyframes shadow-drop-center {
+  0% {
+    -webkit-box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
+    box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
+  }
+  100% {
+    --tw-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1),
+      0 4px 6px -4px rgb(0 0 0 / 0.1);
+    --tw-shadow-colored: 0 10px 15px -3px var(--tw-shadow-color),
+      0 4px 6px -4px var(--tw-shadow-color);
+    box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000),
+      var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
   }
 }
