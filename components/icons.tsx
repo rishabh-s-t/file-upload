@@ -44,6 +44,7 @@ import {
   Upload,
   Lightbulb,
   ListTodo,
+  File,
 } from "lucide-react";
 
 export const Icons = {
@@ -93,4 +94,5 @@ export const Icons = {
   chevronRight: ChevronRight,
   chevronDown: ChevronDown,
   chevronUp: ChevronUp,
+  file: File,
 };
