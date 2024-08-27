@@ -1,7 +1,7 @@
 import {NextResponse} from "next/server";
 import {writeFileSync} from "fs";
 import {join} from "path";
-import cheerio from "cheerio";
+import * as cheerio from "cheerio";
 import axios from "axios";
 import {getStorage, ref, uploadBytes, getDownloadURL} from "firebase/storage";
 import {app} from "@/config/firebase";
