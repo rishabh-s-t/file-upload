@@ -10,6 +10,7 @@ import {
   listAll,
 } from "firebase/storage";
 import {app} from "@/config/firebase";
+import {UploadType, FileLocal} from "@/config/data";
 
 interface PresentationContextType {
   // states -----------------------------
@@ -17,15 +18,12 @@ interface PresentationContextType {
   setUploadsText: React.Dispatch<React.SetStateAction<string[] | undefined>>;
   uploads: File[] | UploadType[] | undefined;
   setUploads: React.Dispatch<React.SetStateAction<UploadType[] | undefined>>;
-  saveFileToFirebase: (file: File) => Promise <UploadType>; 
+  // functions -----------------------------
+  saveFileToFirebase: (
+    file: File,
+    onProgress: (progress: number) => void
+  ) => Promise<FileLocal | undefined>;
 }
-
-type UploadType = {
-  title: string;
-  id: string;
-  path: string;
-  type: "pdf" | "mp4" | "jpg" | "png" | "jpeg" | "mp3" | "doc" | "docx"; 
-};
 
 const PresentationContext = createContext<PresentationContextType | null>(null);
 
@@ -43,14 +41,17 @@ export const PresentationProvider = ({children}: Props) => {
   const [uploads, setUploads] = useState<UploadType[] | undefined>([]);
 
   useEffect(() => {
-    console.log(`Uploads State -> ${JSON.stringify(uploads)}`)
-  }, [uploads])
+    console.log(`Uploads State -> ${JSON.stringify(uploads)}`);
+  }, [uploads]);
 
   useEffect(() => {
-    console.log(`Uploads Text State -> ${JSON.stringify(uploadsText)}`)
-  }, [uploadsText])
+    console.log(`Uploads Text State -> ${JSON.stringify(uploadsText)}`);
+  }, [uploadsText]);
 
-  const saveFileToFirebase = async (file: File, onProgress: (progress: number) => void): Promise<UploadType> => {
+  const saveFileToFirebase = async (
+    file: File,
+    onProgress: (progress: number) => void
+  ): Promise<FileLocal> => {
     try {
       const fileID = Math.random().toString(36).substring(7);
       const storage = getStorage(app);
@@ -86,11 +87,13 @@ export const PresentationProvider = ({children}: Props) => {
       // Get download URL and return the upload object
       const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
 
-      const upload: UploadType = {
+      const upload: FileLocal = {
         title: file.name,
-        id: fileID,
+        uploadProgress: 100,
+        // id: fileID,
         path: downloadURL,
-        type: file.type,
+        type: file.type as UploadType["type"],
+        file,
       };
 
       // setUploadData(upload as UploadType);
@@ -107,7 +110,7 @@ export const PresentationProvider = ({children}: Props) => {
     setUploadsText,
     uploads,
     setUploads,
-    // functions 
+    // functions
     saveFileToFirebase,
   };
 
