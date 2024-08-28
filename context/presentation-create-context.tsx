@@ -23,6 +23,9 @@ interface PresentationContextType {
     file: File,
     onProgress: (progress: number) => void
   ) => Promise<FileLocal | undefined>;
+  deleteFile: (
+    file: string,
+  ) => Promise<void>;
 }
 
 const PresentationContext = createContext<PresentationContextType | null>(null);
@@ -104,6 +107,18 @@ export const PresentationProvider = ({children}: Props) => {
     }
   };
 
+  const deleteFile = async (filePath: string): Promise<void> => {
+    try {
+      const storage = getStorage();
+      const fileRef = ref(storage, filePath);
+      await deleteObject(fileRef);
+      console.log('File deleted successfully!');
+    } catch (error) {
+      console.error('Error deleting file. ', error);
+      throw error;
+    }
+  }
+
   const values = {
     // states -----------------------------
     uploadsText,
@@ -112,6 +127,7 @@ export const PresentationProvider = ({children}: Props) => {
     setUploads,
     // functions
     saveFileToFirebase,
+    deleteFile,
   };
 
   return (

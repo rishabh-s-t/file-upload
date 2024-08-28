@@ -22,3 +22,6 @@ export type FileLocal = {
     | "docx"
     | undefined;
 };
+
+export const FILE_SIZE = 50;
+export const MAX_FILE_SIZE_MB = FILE_SIZE * 1024 * 1024;
