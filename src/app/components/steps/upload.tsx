@@ -12,6 +12,7 @@ pdfjs.GlobalWorkerOptions.workerSrc = pdfjsWorker;
 import StepContainer from "../step-container";
 import {FILE_SIZE, FileLocal, MAX_FILE_SIZE_MB, UploadType} from "@/config/data";
 import NavigationButtons from "../navigation-buttons";
+import GoogleDriveImport from "./support/GoogleDriveImport";
 
 const Uploads = ({
   setStep,
@@ -527,17 +528,6 @@ const UploadManager = ({
     </div>
   );
 };
-
-const GoogleDriveImport = () => {
-  return (
-    <div className={` w-full border-2 border rounded-[1rem] hover:border-primary items-center flex flex-col gap-2 mb-2 group `}>
-      <div className="flex flex-col items-center p-4">
-        <Icons.drive className="w-10 h-10 text-primary" />
-        <p className="text-muted-foreground">Import your files from <span className="text-md font-bold">Google Drive</span></p>
-      </div>
-    </div>
-  )
-}
 
 const ImportFromUrl = () => {
   const {uploadsText, setUploadsText, uploads, setUploads} = usePresentation()!;

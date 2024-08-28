@@ -22,6 +22,7 @@
     "react": "^18",
     "react-dom": "^18",
     "react-dropzone": "^14.2.3",
+    "react-google-drive-picker": "^1.2.2",
     "tailwind-merge": "^2.5.2"
   },
   "devDependencies": {
