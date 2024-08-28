@@ -45,9 +45,19 @@ import {
   Lightbulb,
   ListTodo,
   File,
+  FileText,
+  ImageUp,
+  FileVideo,
+  FileAudio ,
+  FolderDown 
 } from "lucide-react";
 
 export const Icons = {
+  drive: FolderDown,
+  audio: FileAudio,
+  vid: FileVideo,
+  img: ImageUp,
+  pdf: FileText,
   todo: ListTodo,
   lightbulb: Lightbulb,
   upload: Upload,
