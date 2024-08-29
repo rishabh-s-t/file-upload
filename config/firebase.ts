@@ -3,13 +3,13 @@ import {getFirestore} from "firebase/firestore";
 import {getAuth} from "firebase/auth";
 
 const firebaseConfig = {
-  apiKey: 'AIzaSyAPcEAaJz4YaDDSxMuHYaba_2Z0YmOBYXM',
-  authDomain: "file-upload-cc4c4.firebaseapp.com",
-  projectId: "file-upload-cc4c4",
-  storageBucket: "file-upload-cc4c4.appspot.com",
-  messagingSenderId: "1057862026323",
-  appId: "1:1057862026323:web:c2cbed74cb5621d00672a6",
-  // measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
+  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
+  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
+  measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
 };
 
 export const app = initializeApp(firebaseConfig);

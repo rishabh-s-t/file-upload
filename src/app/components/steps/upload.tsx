@@ -2,17 +2,22 @@
 import React, {useState, useRef, useEffect} from "react";
 import {Button} from "@/components/ui/button";
 import {Label} from "@/components/ui/label";
-import { Toaster } from "@/components/ui/toaster";
-import { useToast } from "@/components/ui/use-toast";
+import {Toaster} from "@/components/ui/toaster";
+import {useToast} from "@/components/ui/use-toast";
 import {usePresentation} from "@/context/presentation-create-context";
 import {Icons} from "@/components/icons";
 import pdfjsWorker from "pdfjs-dist/legacy/build/pdf.worker.min.js";
 import {Document, pdfjs} from "react-pdf";
 pdfjs.GlobalWorkerOptions.workerSrc = pdfjsWorker;
 import StepContainer from "../step-container";
-import {FILE_SIZE, FileLocal, MAX_FILE_SIZE_MB, UploadType} from "@/config/data";
+import {
+  FILE_SIZE,
+  FileLocal,
+  MAX_FILE_SIZE_MB,
+  UploadType,
+} from "@/config/data";
 import NavigationButtons from "../navigation-buttons";
-import GoogleDriveImport from "./support/GoogleDriveImport";
+import GoogleDriveImport from "./support/google-drive-import";
 
 const Uploads = ({
   setStep,
@@ -21,7 +26,7 @@ const Uploads = ({
 }) => {
   const {uploads} = usePresentation()!;
   //toast initiation
-  const {toast} = useToast(); 
+  const {toast} = useToast();
 
   const localFiles =
     uploads &&
@@ -65,10 +70,11 @@ const UploadManager = ({
   setFiles: React.Dispatch<React.SetStateAction<FileLocal[] | undefined>>;
 }) => {
   //   state to store the uploaded file and uploaded text
-  const {setUploadsText, saveFileToFirebase, setUploads, deleteFile} = usePresentation()!;
-  
+  const {setUploadsText, saveFileToFirebase, setUploads, deleteFile} =
+    usePresentation()!;
+
   //toast initiation
-  const {toast} = useToast(); 
+  const {toast} = useToast();
 
   // state for drag and drop
   const [isDragging, setIsDragging] = useState(false);
@@ -101,13 +107,16 @@ const UploadManager = ({
   };
 
   const handleProgressUpdate = (file: File, progress: number) => {
-    console.log(`Updating progress for file: ${file.name}, progress: ${progress}`);
+    console.log(
+      `Updating progress for file: ${file.name}, progress: ${progress}`
+    );
     setFiles((prevFiles) =>
       prevFiles?.map((f) =>
         f.file === file
-          ? { ...f, uploadProgress: Math.min(progress, 100) } // Ensure progress is capped at 100%
+          ? {...f, uploadProgress: Math.min(progress, 100)} // Ensure progress is capped at 100%
           : f
-      ))
+      )
+    );
   };
 
   const processFiles = async (fileList: FileList | File[]) => {
@@ -118,26 +127,26 @@ const UploadManager = ({
         const fileType = getFileType(file);
 
         if (!fileType) {
-          console.log('Unsupported File Type');
+          console.log("Unsupported File Type");
           toast({
-            variant: 'destructive',
-            title: 'Unsupported File Type',
+            variant: "destructive",
+            title: "Unsupported File Type",
             description: `${file.name} is not a supported file type.`,
           });
           return false;
         }
 
         if (file.size > MAX_FILE_SIZE_MB) {
-          console.log('File Too Large');
+          console.log("File Too Large");
           toast({
-            variant: 'destructive',
-            title: 'File Too Large',
+            variant: "destructive",
+            title: "File Too Large",
             description: `${file.name} exceeds the ${FILE_SIZE}MB limit.`,
           });
           return false;
         }
         return true;
-      })
+      });
 
       const newFiles = vaildFiles.map((file) => ({
         file,
@@ -145,25 +154,25 @@ const UploadManager = ({
         path: URL.createObjectURL(file),
         title: file.name,
         type: getFileType(file),
-      }))
+      }));
 
       setFiles((prevFiles) => {
-        const updatedFiles = [...(prevFiles || []), ...newFiles]
-        return updatedFiles
-      })
+        const updatedFiles = [...(prevFiles || []), ...newFiles];
+        return updatedFiles;
+      });
 
       for (const fileLocal of newFiles) {
-        await uploadFile(fileLocal)
+        await uploadFile(fileLocal);
       }
     } catch (error) {
-      console.error('Error processing the files ', error)
+      console.error("Error processing the files ", error);
       toast({
-        variant: 'destructive',
-        title: 'Error Processing Files',
-        description: 'An unexpected error occurred while processing the files.',
+        variant: "destructive",
+        title: "Error Processing Files",
+        description: "An unexpected error occurred while processing the files.",
       });
     }
-  }
+  };
 
   const onFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     // function to handle the file change event
@@ -181,9 +190,9 @@ const UploadManager = ({
     if (!fileList || fileList.length === 0) {
       console.log("No files selected");
       toast({
-        title: 'No file selected',
-        description: 'Please select a file to proceed further.'
-      })
+        title: "No file selected",
+        description: "Please select a file to proceed further.",
+      });
       return;
     }
     await processFiles(fileList);
@@ -224,12 +233,12 @@ const UploadManager = ({
       );
 
       if (!upload || !upload.path) {
-        console.error('Upload failed or no URL returnd')
+        console.error("Upload failed or no URL returnd");
         toast({
-          variant: 'destructive',
-          title: 'File upload failed!',
+          variant: "destructive",
+          title: "File upload failed!",
           description: `Upload failed or no URL returned`,
-        })
+        });
       }
 
       const updatedFileLocal = {
@@ -245,9 +254,9 @@ const UploadManager = ({
 
       console.log("File Uploaded Successfully");
       toast({
-        title: 'File uploaded successfully!',
+        title: "File uploaded successfully!",
         description: `${fileLocal.title} was uploaded successfully!`,
-      })
+      });
 
       // TEXT CONVERSION IS HAPPENING HERE _______________________
       if (fileLocal.type === "pdf") {
@@ -270,46 +279,53 @@ const UploadManager = ({
         // Saving uploads
         await addNewUploads(updatedFileLocal);
       }
-      
+
       return updatedFileLocal;
       // More stuff here maybe
     } catch (error) {
       console.error("File Upload Failed: ", error);
       toast({
-        variant: 'destructive',
-        title: 'Uh Oh! Something went Wrong.',
-        description: 'An error occured while uploading the file. Please retry later.'
-      })
+        variant: "destructive",
+        title: "Uh Oh! Something went Wrong.",
+        description:
+          "An error occured while uploading the file. Please retry later.",
+      });
       return null;
     }
   }
 
   const handleCancel = async (file: FileLocal) => {
     try {
-      console.log(`Clicked cancel button -> ${JSON.stringify(file)}`)
+      console.log(`Clicked cancel button -> ${JSON.stringify(file)}`);
       if (file.path) {
         // Delete from DB
         await deleteFile(file.path);
         toast({
-          title: 'File deleted.',
-          description: `${file.title} has been deleted successfully.`
-        })
+          title: "File deleted.",
+          description: `${file.title} has been deleted successfully.`,
+        });
 
         // Delete from local state
-        setFiles(prevFiles => prevFiles?.filter(f => f.path !== file.path) || undefined);
+        setFiles(
+          (prevFiles) =>
+            prevFiles?.filter((f) => f.path !== file.path) || undefined
+        );
 
-         // Also update the uploads state in the context
-         setUploads(prevUploads => prevUploads?.filter(u => u.path !== file.path) || undefined);
+        // Also update the uploads state in the context
+        setUploads(
+          (prevUploads) =>
+            prevUploads?.filter((u) => u.path !== file.path) || undefined
+        );
       } else {
-        console.error('No File Path provided for deletion');
+        console.error("No File Path provided for deletion");
       }
     } catch (error) {
       console.error("Error deleting file: ", error);
       toast({
-        variant: 'destructive',
-        title: 'Error',
-        description: `Failed to delete ${file.title}. Please try again.`
-      })
+        variant: "destructive",
+        title: "Error",
+        description: `Failed to delete ${file.title}. Please try again.`,
+      });
     }
   };
 
@@ -348,10 +364,10 @@ const UploadManager = ({
     } catch (error) {
       console.error("Error extracting text from PDF:", error);
       toast({
-        variant: 'destructive',
+        variant: "destructive",
         title: `Oops!`,
         description: `Error extracting text from ${file.name}`,
-      })
+      });
       return [];
     }
   };
@@ -363,38 +379,30 @@ const UploadManager = ({
     fileLocal: FileLocal;
     onCancel: (file: FileLocal) => void;
   }) => {
-    const [uploadComplete, setUploadComplete] = useState(fileLocal.uploadProgress === 100);
-
-    useEffect(() => {
-      if (fileLocal.uploadProgress === 100) {
-        setUploadComplete(true);
-      } else {
-        setUploadComplete(false);
-      }
-    }, [fileLocal.uploadProgress]);
+    const uploadComplete = fileLocal.uploadProgress === 100;
 
     const renderIcon = () => {
       switch (fileLocal.type) {
-        case 'pdf':
-        case 'doc':
-        case 'docx':
-         return <Icons.pdf className=" w-5 h-5 text-primary " />
-         
-        case 'mp4':
-          return <Icons.vid className=" w-5 h-5 text-primary " />
+        case "pdf":
+        case "doc":
+        case "docx":
+          return <Icons.pdf className=" w-5 h-5 text-primary " />;
 
-        case 'jpg':
-        case 'jpeg':
-        case 'png':
-          return <Icons.img className=" w-5 h-5 text-primary " />
+        case "mp4":
+          return <Icons.vid className=" w-5 h-5 text-primary " />;
 
-        case 'mp3':
-          return <Icons.audio className=" w-5 h-5 text-primary " />
+        case "jpg":
+        case "jpeg":
+        case "png":
+          return <Icons.img className=" w-5 h-5 text-primary " />;
+
+        case "mp3":
+          return <Icons.audio className=" w-5 h-5 text-primary " />;
 
         default:
-          return <Icons.file className=" w-5 h-5 text-primary " />
+          return <Icons.file className=" w-5 h-5 text-primary " />;
       }
-    }
+    };
 
     return (
       <div className="w-full p-4 flex flex-col gap-2 border border-gray-300 bg-background rounded-lg ">
@@ -414,7 +422,7 @@ const UploadManager = ({
                   <div className="text-muted-foreground">
                     {(fileLocal.file.size / (1024 * 1024)).toFixed(2)} MB
                   </div>
-                  {fileLocal.uploadProgress < 100 && (
+                  {!uploadComplete && (
                     <span className="text-primary font-bold  w-[50px]">{`${Math.ceil(
                       fileLocal.uploadProgress
                     ).toFixed(0)}%`}</span>
@@ -422,15 +430,14 @@ const UploadManager = ({
                 </div>
               </div>
             </div>
-            <div className="w-full bg-gray-200 rounded-full h-2 mt-2">
-              <div
-                className="bg-primary h-2 rounded-full"
-                style={{width: `${fileLocal.uploadProgress}%`}}
-              />
-            </div>
-            {/* {fileLocal.uploadProgress < 100 && (
-              
-            )} */}
+            {!uploadComplete && (
+              <div className="w-full bg-gray-200 rounded-full h-2 mt-2">
+                <div
+                  className="bg-primary h-2 rounded-full"
+                  style={{width: `${fileLocal.uploadProgress}%`}}
+                />
+              </div>
+            )}
           </div>
           <button
             onClick={() => onCancel(fileLocal)}
@@ -465,17 +472,15 @@ const UploadManager = ({
           type="file"
           accept=".pdf, .jpg, .png, .mp4, .doc, .mp3, docx"
           onChange={(e) => {
-              onFileChange(e);
-            }
-          }
+            onFileChange(e);
+          }}
           multiple
         />
 
         <button
           onClick={() => {
-              document.getElementById("file-input")?.click()
-            }
-          }
+            document.getElementById("file-input")?.click();
+          }}
           className="w-full p-4 rounded-[1rem] hover:border-primary items-center flex flex-col gap-2 mb-2"
         >
           <Icons.upload className="w-10 h-10 text-primary" />
@@ -489,7 +494,7 @@ const UploadManager = ({
           </p>
         </button>
       </div>
-      
+
       {/* Conditional rendering for the progress bar */}
       {files && files.length > 0 && (
         <div className="mt-4 grid gap-2">
