@@ -244,6 +244,7 @@ const UploadManager = ({
       const updatedFileLocal = {
         ...fileLocal,
         path: upload?.path || fileLocal.path,
+        uploadProgress: 100,
       };
 
       setFiles((prevFiles) =>
